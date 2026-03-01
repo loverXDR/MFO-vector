@@ -1,7 +1,16 @@
+version: '3.8'
 services:
-  mfo-website:
-    build: .
-    container_name: mfo_zanachka_web
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "8080:80"
-    restart: unless-stopped
+      - "3000:3000"
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=file:./dev.db
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=super-secret-key-12345
+    # The database file is copied securely during the build step.
+    # In production, this would be a postgres/mysql separate container.

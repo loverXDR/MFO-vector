@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  passwordHash String
+  role         String        @default("USER") // USER or BANK
+  fullName     String?
+  phone        String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  
+  // Relations
+  loanRequests LoanRequest[]
+  bankOffers   BankOffer[]
+}
+
+model LoanRequest {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  amount    Float
+  termDays  Int
+  status    String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  mlScore   Float?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BankOffer {
+  id             String   @id @default(cuid())
+  bankId         String
+  bank           User     @relation(fields: [bankId], references: [id])
+  maxAmountLimit Float
+  interestRate   Float
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
