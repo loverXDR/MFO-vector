@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# МФО «Заначка» — Современный финансовый сервис
 
-## Getting Started
+МФО «Заначка» — это полнофункциональное веб-приложение для микрофинансовой организации, предоставляющее интерфейс для клиентов (оформление займов, личный кабинет) и для сотрудников банка (панель управления, модерация заявок с использованием ML-моделей).
 
-First, run the development server:
+Проект разработан с фокусом на современный премиальный дизайн, высокую производительность (SSR) и полную адаптивность под мобильные устройства.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Технологический стек
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Фреймворк:** [Next.js](https://nextjs.org/) (App Router, React 19)
+- **Язык программирования:** TypeScript
+- **Стилизация:** [Tailwind CSS v4](https://tailwindcss.com/)
+- **База данных и ORM:** [Prisma](https://www.prisma.io/) (SQLite)
+- **Аутентификация:** [NextAuth.js](https://next-auth.js.org/) + bcrypt
+- **Иконки:** [Lucide React](https://lucide.dev/)
+- **Тестирование:** [Playwright](https://playwright.dev/)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠 Ключевой функционал
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Для клиентов (Пользовательский интерфейс)
+- **Главная страница:** Информация о компании, интерактивный калькулятор займа, уникальные торговые предложения.
+- **Страница продуктов (`/products/[type]`):** Динамические страницы с детальным описанием различных финансовых продуктов, таких как:
+  - Потребительский кредит
+  - Финансирование для бизнеса
+  - BNPL (Рассрочка)
+  - Займ под залог
+  - Виртуальная кредитная карта
+- **Тарифы и технологии (`/conditions`, `/about`):** Информационные разделы для пользователей о работе скоринга и прозрачных условиях.
+- **Личный кабинет (`/dashboard`):** Авторизованная зона для просмотра текущих договоров, графика платежей и настроек профиля.
+- **Адаптивный дизайн:** Поддержка всех типов мобильных устройств с удобным боковым и гамбургер-меню.
 
-## Learn More
+### Для сотрудников (Банковский интерфейс)
+- **Панель сотрудника (`/bank-dashboard`):** Отдельное защищенное рабочее пространство.
+- **ML-Модерация:** Имитация работы Machine Learning (ML) скоринга для мгновенного и автоматизированного принятия решений по заявкам заемщиков.
+- **Управление пользователями:** Просмотр статистики заявок и статусов одобрения.
 
-To learn more about Next.js, take a look at the following resources:
+## 📦 Установка и запуск для локальной разработки
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Требования
+- Node.js (рекомендуется v18 и выше)
+- npm, pnpm или bun
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Шаги по запуску
 
-## Deploy on Vercel
+1. **Клонируйте репозиторий и перейдите в папку проекта:**
+   ```bash
+   cd MFO-vector
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. **Установите зависимости:**
+   ```bash
+   npm install
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. **Настройте переменные окружения:**
+   Создайте или скопируйте конфигурацию в файл `.env` в корневой директории:
+   ```env
+   DATABASE_URL="file:./dev.db"
+   NEXTAUTH_SECRET="your_secure_random_string_here"
+   NEXTAUTH_URL="http://localhost:3000"
+   ```
+
+4. **Инициализируйте базу данных (Prisma):**
+   Сгенерируйте клиент Prisma и примените структуру базы данных (SQLite):
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+
+5. **Запустите проект:**
+   ```bash
+   npm run dev
+   ```
+
+6. **Откройте приложение:**
+   Перейдите по адресу [http://localhost:3000](http://localhost:3000) в вашем браузере.
+
+## 📁 Структура проекта (основные директории)
+
+- `/src/app/` — Основные маршруты, страницы и layouts (App Router).
+  - `/dashboard/` — Личный кабинет заемщика.
+  - `/bank-dashboard/` — Панель управления менеджера/администратора банка.
+  - `/products/` — Динамические посадочные страницы продуктов.
+  - `/api/` — API роуты (включая NextAuth).
+- `/src/components/` — Глобальные и переиспользуемые React-компоненты (адаптивный Header, Footer и другие UI элементы).
+- `/prisma/` — Конфигурация и схема подключения БД (`schema.prisma`).
+
+## 🤝 Аутентификация и Роли
+В проекте реализована ролевая модель доступа (RBAC) с помощью `NextAuth.js` и хранения сессий на стороне клиента (JWT).
+В зависимости от роли пользователя (`USER` или `BANK`), происходит маршрутизация после успешного входа:
+- Обычные клиенты попадают в раздел `/dashboard`.
+- Сотрудники финансовой организации попадают в служебный раздел `/bank-dashboard`.
+
+## 📜 О проекте
+Задание на разработку и создание полнофункциональной копии сервиса выдачи займов. Архитектура готова к развертыванию (Production-ready) и масштабированию.
