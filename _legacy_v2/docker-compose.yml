@@ -1,7 +1,0 @@
-services:
-  mfo-website:
-    build: .
-    container_name: mfo_zanachka_web
-    ports:
-      - "8080:80"
-    restart: unless-stopped
